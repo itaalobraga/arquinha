@@ -26,9 +26,10 @@ Abra no Expo Go (celular) ou aperte `i` / `a` para o simulador.
 - `src/screens/`: `HomeScreen` e `PlayScreen`
 - `src/components/`: `AnimalPop` (animação do bicho)
 - `src/credits.ts`: autores e licenças dos sons
+- `src/components/AnimatedSplash.tsx`: abertura animada (Lottie) que assume no lugar da splash nativa
+- `design/art.mjs`: gera toda a arte (ícones iOS/Android, splash nativa e `assets/lottie/splash.json`). Rode `npm run art` depois de mexer nas formas ou cores.
 
 ## Próximos passos
 
 - Sons: 14 gravações reais do Wikimedia Commons (créditos em `src/credits.ts` e na tela de créditos). Ouvir e trocar as que ficarem ruins.
 - Trocar os emojis por ilustrações próprias.
-- Criar o ícone e a tela de abertura.
