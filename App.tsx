@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { setupSounds } from './src/sounds';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { PlayScreen } from './src/screens/PlayScreen';
+import { CreditsScreen } from './src/screens/CreditsScreen';
+
+type Screen = 'home' | 'play' | 'credits';
 
 export default function App() {
+  const [screen, setScreen] = useState<Screen>('home');
+
+  useEffect(() => {
+    setupSounds().catch((e) => console.warn('Falha ao carregar sons', e));
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      {screen === 'play' && <PlayScreen onExit={() => setScreen('home')} />}
+      {screen === 'credits' && <CreditsScreen onBack={() => setScreen('home')} />}
+      {screen === 'home' && (
+        <HomeScreen onStart={() => setScreen('play')} onCredits={() => setScreen('credits')} />
+      )}
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
