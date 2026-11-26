@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
-  startButtonPressed: { transform: [{ scale: 0.97 }], opacity: 0.9 },
+  startButtonPressed: { transform: [{ scale: 0.97 }] },
   startText: { fontSize: 24, fontWeight: '800', color: '#fff' },
   tips: { backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 20, padding: 16, gap: 6 },
   tipTitle: { fontSize: 16, fontWeight: '800', color: '#5B3A1A' },
