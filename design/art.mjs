@@ -534,4 +534,28 @@ for (const n of ['layer-waves.svg', 'layer-ark.svg', 'layer-rainbow.svg'])
 
 write('assets/lottie/splash.json', JSON.stringify(lottie));
 
+// Banner do README (1280x640, mesma proporção da prévia social do GitHub)
+const FONTS = join(ROOT, 'node_modules/@expo-google-fonts/fredoka');
+const banner =
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640"><defs>${skyDefs}</defs>` +
+  `<rect width="1280" height="640" fill="url(#sky)"/>` +
+  iconArt('translate(48,8) scale(0.62) translate(0,40)') +
+  `<path d="${wavesFill(486, 48, 16, -128, 1408, 700).toSvg()}" fill="${C.waveLight}"/>` +
+  `<path d="${wavesFill(534, 60, 19, -160, 1408, 700).toSvg()}" fill="${C.wave}"/>` +
+  `<path d="${wavesFill(592, 54, 15, -100, 1408, 700).toSvg()}" fill="${C.waveDeep}"/>` +
+  `<text x="660" y="290" font-family="Fredoka" font-weight="700" font-size="128" fill="${C.brown}">Arquinha</text>` +
+  `<text x="664" y="356" font-family="Fredoka" font-weight="500" font-size="40" fill="#8A6542">Toque, veja e ouça os bichos.</text>` +
+  `</svg>`;
+write(
+  '.github/assets/banner.png',
+  new Resvg(banner, {
+    font: {
+      fontFiles: [`${FONTS}/700Bold/Fredoka_700Bold.ttf`, `${FONTS}/500Medium/Fredoka_500Medium.ttf`],
+      loadSystemFonts: false,
+    },
+  })
+    .render()
+    .asPng(),
+);
+
 console.log(`ok: ${layers.length} camadas Lottie, ${OP / FR}s a ${FR}fps, quadro ${COMP}px`);
