@@ -9,7 +9,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/iOS%20%7C%20Android-5B3A1A?style=flat-square" alt="iOS e Android" />
   <img src="https://img.shields.io/badge/Expo%20SDK-58-FF6C3C?style=flat-square" alt="Expo SDK 58" />
-  <img src="https://img.shields.io/badge/licen%C3%A7a-MIT-4AA8FF?style=flat-square" alt="Licença MIT" />
 </p>
 
 ---
@@ -87,4 +86,4 @@ A fonte é a [Fredoka](https://fonts.google.com/specimen/Fredoka), sob a SIL Ope
 
 ## Licença
 
-Código sob a licença MIT. Veja [LICENSE](LICENSE).
+© 2026 Ítalo Braga. Todos os direitos reservados. O código e a arte não podem ser reutilizados sem autorização. Veja [LICENSE](LICENSE).

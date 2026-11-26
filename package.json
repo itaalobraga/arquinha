@@ -32,5 +32,6 @@
     "lint": "expo lint",
     "art": "node design/art.mjs"
   },
-  "private": true
+  "private": true,
+  "license": "UNLICENSED"
 }
