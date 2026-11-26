@@ -26,6 +26,7 @@ export function AnimatedSplash({ onDone }: Props) {
   const [opacity] = useState(() => new Animated.Value(1));
   const [title] = useState(() => new Animated.Value(0));
   const [titleY] = useState(() => title.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }));
+  const started = useRef(false);
   const finished = useRef(false);
 
   const finish = useCallback(() => {
@@ -40,7 +41,12 @@ export function AnimatedSplash({ onDone }: Props) {
     }).start(() => onDone());
   }, [onDone, opacity]);
 
+  // No iOS o onAnimationLoaded não dispara para JSON local (o lottie-react-native só passa
+  // a escutar o evento depois que a animação já carregou). Por isso começamos no onLayout,
+  // quando a view nativa já existe com a animação, e o onAnimationLoaded fica de reserva.
   const start = useCallback(() => {
+    if (started.current || finished.current) return;
+    started.current = true;
     SplashScreen.hide();
     if (reducedMotion) {
       title.setValue(1);
@@ -72,9 +78,13 @@ export function AnimatedSplash({ onDone }: Props) {
         autoPlay={false}
         loop={false}
         resizeMode="contain"
+        onLayout={() => requestAnimationFrame(start)}
         onAnimationLoaded={start}
         onAnimationFinish={finish}
-        onAnimationFailure={finish}
+        onAnimationFailure={(error) => {
+          if (__DEV__) console.warn('Lottie da splash falhou:', error);
+          finish();
+        }}
       />
       <Animated.Text
         style={[
