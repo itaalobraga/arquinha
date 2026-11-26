@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, StyleSheet, Text } from 'react-native';
 import type { Animal, AnimalMotion } from '../animals';
 import { EASE_OUT } from '../motion';
+import { colors, fonts } from '../theme';
 
 const SIZE = 170;
 const LIFETIME_MS = 2200;
@@ -185,12 +186,12 @@ const styles = StyleSheet.create({
     lineHeight: 104,
   },
   name: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#5B3A1A',
-    backgroundColor: 'rgba(255,255,255,0.85)',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
+    fontSize: 21,
+    fontFamily: fonts.semibold,
+    color: colors.ink,
+    backgroundColor: 'rgba(255,255,255,0.88)',
+    paddingHorizontal: 12,
+    paddingVertical: 3,
     borderRadius: 12,
     overflow: 'hidden',
   },

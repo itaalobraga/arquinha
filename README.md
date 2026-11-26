@@ -13,7 +13,7 @@ Abra no Expo Go (celular) ou aperte `i` / `a` para o simulador.
 
 ## Como funciona
 
-- **Início**: tela para os pais, com o botão "Começar a brincar" e dicas.
+- **Início**: a arca, o nome e o botão "Começar a brincar". As dicas ficam na folha "Para os pais".
 - **Brincando**: cada toque (com vários dedos ao mesmo tempo) mostra um bicho animado e toca o som dele. O fundo muda de cor e o celular vibra de leve.
 - **Trava**: sem nenhum botão na tela. A barra de status fica escondida, a tela não apaga e o "voltar" do Android é ignorado.
 - **Saída dos pais**: segurar os dois cantos de cima da tela ao mesmo tempo por 2 segundos volta para a tela inicial. Teste num iPhone de verdade (o simulador não faz dois toques fácil).
@@ -24,7 +24,9 @@ Abra no Expo Go (celular) ou aperte `i` / `a` para o simulador.
 - `src/animals.ts`: lista de bichos (emoji, nome, som)
 - `src/sounds.ts`: carrega e toca os sons (expo-audio)
 - `src/screens/`: `HomeScreen` e `PlayScreen`
-- `src/components/`: `AnimalPop` (animação do bicho)
+- `src/components/`: `AnimalPop` (animação do bicho), `ColorRipple`, `CornerHold`, `ParentsSheet` e `PressableScale`
+- `src/theme.ts`: cores e fontes (Fredoka) do app todo
+- `src/motion.ts`: curva de animação padrão e `useReducedMotion`
 - `src/credits.ts`: autores e licenças dos sons
 - `src/components/AnimatedSplash.tsx`: abertura animada (Lottie) que assume no lugar da splash nativa
 - `design/art.mjs`: gera toda a arte (ícones iOS/Android, splash nativa e `assets/lottie/splash.json`). Rode `npm run art` depois de mexer nas formas ou cores.

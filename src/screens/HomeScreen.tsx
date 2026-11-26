@@ -1,73 +1,120 @@
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Animated, Easing, Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PressableScale } from '../components/PressableScale';
+import { ParentsSheet } from '../components/ParentsSheet';
+import { useReducedMotion } from '../motion';
+import { colors, fonts } from '../theme';
+
+// A arte da splash é um quadrado com folga em volta; recortamos só a faixa da arca.
+const ARK_IMAGE = require('../../assets/splash-icon.png');
+const ARK_CROP = { width: 680, height: 460, source: 1024 };
 
 type Props = { onStart: () => void; onCredits: () => void };
 
-const PIN_TIP =
-  Platform.OS === 'ios'
-    ? 'Para travar de verdade, ative o Acesso Guiado: Ajustes › Acessibilidade › Acesso Guiado. Depois, com o app aberto, clique 3 vezes no botão lateral.'
-    : 'Para travar de verdade, ative a Fixação de tela: Configurações › Segurança › Fixar app. Depois fixe o Arquinha pela tela de apps recentes.';
-
 export function HomeScreen({ onStart, onCredits }: Props) {
   const insets = useSafeAreaInsets();
+  const [parentsOpen, setParentsOpen] = useState(false);
+
+  const openCredits = () => {
+    setParentsOpen(false);
+    onCredits();
+  };
+
   return (
-    <View style={[styles.container, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 24 }]}>
+    <View style={[styles.container, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 20 }]}>
       <StatusBar style="dark" />
-      <View style={styles.header}>
-        <Text style={styles.parade}>🦁 🐘 🐮</Text>
-        <Text style={styles.parade}>🐶 🐸 🦆 🐷</Text>
+
+      <View style={styles.hero}>
+        <FloatingArk />
         <Text style={styles.title}>Arquinha</Text>
-        <Text style={styles.subtitle}>Toque na tela e ouça os bichos!</Text>
+        <Text style={styles.subtitle}>Toque na tela e ouça os bichos</Text>
       </View>
 
-      <Pressable
-        onPress={onStart}
-        style={({ pressed }) => [styles.startButton, pressed && styles.startButtonPressed]}
-      >
-        <Text style={styles.startText}>Começar a brincar</Text>
-      </Pressable>
-
-      <View style={styles.tips}>
-        <Text style={styles.tipTitle}>Para os pais</Text>
-        <Text style={styles.tip}>
-          • Para sair, segure com dois dedos os dois cantos de cima da tela ao mesmo tempo por 2 segundos.
-        </Text>
-        <Text style={styles.tip}>• {PIN_TIP}</Text>
-        <Pressable onPress={onCredits} hitSlop={8}>
-          <Text style={styles.creditsLink}>Créditos dos sons</Text>
+      <View style={styles.actions}>
+        <PressableScale onPress={onStart} style={styles.startButton} accessibilityRole="button">
+          <Text style={styles.startText}>Começar a brincar</Text>
+        </PressableScale>
+        <Pressable
+          onPress={() => setParentsOpen(true)}
+          hitSlop={12}
+          accessibilityRole="button"
+          style={styles.parentsButton}
+        >
+          <Text style={styles.parentsLink}>Para os pais</Text>
         </Pressable>
       </View>
+
+      <ParentsSheet visible={parentsOpen} onClose={() => setParentsOpen(false)} onCredits={openCredits} />
     </View>
+  );
+}
+
+/** A arca balança devagar, como quem está na água. */
+function FloatingArk() {
+  const { width: screenW } = useWindowDimensions();
+  const reduceMotion = useReducedMotion();
+  const [wave] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const half = { duration: 1600, easing: Easing.inOut(Easing.sin), useNativeDriver: true };
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(wave, { toValue: 1, ...half }),
+        Animated.timing(wave, { toValue: 0, ...half }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [wave, reduceMotion]);
+
+  const w = Math.min(screenW - 96, 260);
+  const h = (w * ARK_CROP.height) / ARK_CROP.width;
+  const imageSize = (w * ARK_CROP.source) / ARK_CROP.width;
+
+  return (
+    <Animated.View
+      style={{
+        width: w,
+        height: h,
+        overflow: 'hidden',
+        transform: [
+          { translateY: wave.interpolate({ inputRange: [0, 1], outputRange: [-4, 4] }) },
+          { rotate: wave.interpolate({ inputRange: [0, 1], outputRange: ['-1.5deg', '1.5deg'] }) },
+        ],
+      }}
+    >
+      <Image
+        source={ARK_IMAGE}
+        style={{ position: 'absolute', width: imageSize, height: imageSize, left: (w - imageSize) / 2, top: (h - imageSize) / 2 }}
+        accessibilityIgnoresInvertColors
+      />
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF4D6',
+    backgroundColor: colors.background,
     paddingHorizontal: 24,
-    justifyContent: 'space-between',
   },
-  header: { alignItems: 'center', marginTop: 24 },
-  title: { fontSize: 48, fontWeight: '900', color: '#5B3A1A', marginTop: 16 },
-  subtitle: { fontSize: 18, color: '#7A5532', marginTop: 4 },
-  parade: { fontSize: 56, lineHeight: 72, letterSpacing: 6 },
-  creditsLink: { fontSize: 13, color: '#7A5532', textDecorationLine: 'underline', marginTop: 4 },
+  hero: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  title: { fontFamily: fonts.bold, fontSize: 56, color: colors.ink, marginTop: 20, letterSpacing: -0.5 },
+  subtitle: { fontFamily: fonts.regular, fontSize: 19, color: colors.inkSoft, marginTop: 2 },
+  actions: { gap: 20 },
+  parentsButton: { alignSelf: 'center' },
   startButton: {
-    backgroundColor: '#FF8A3D',
-    paddingVertical: 22,
-    borderRadius: 28,
+    backgroundColor: colors.accent,
+    paddingVertical: 20,
+    borderRadius: 999,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
+    // Base sólida mais escura em vez de sombra difusa: parece um botão de brinquedo.
+    borderBottomWidth: 5,
+    borderBottomColor: colors.accentDeep,
   },
-  startButtonPressed: { transform: [{ scale: 0.97 }] },
-  startText: { fontSize: 24, fontWeight: '800', color: '#fff' },
-  tips: { backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 20, padding: 16, gap: 6 },
-  tipTitle: { fontSize: 16, fontWeight: '800', color: '#5B3A1A' },
-  tip: { fontSize: 14, color: '#5B3A1A', lineHeight: 20 },
+  startText: { fontFamily: fonts.semibold, fontSize: 24, color: colors.surface },
+  parentsLink: { fontFamily: fonts.medium, fontSize: 16, color: colors.inkSoft, paddingVertical: 4 },
 });

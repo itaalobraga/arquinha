@@ -3,6 +3,7 @@ import { Animated, StyleSheet, useWindowDimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { EASE_OUT, useReducedMotion } from '../motion';
+import { colors, fonts } from '../theme';
 
 // Mantém a splash nativa até a animação estar pronta para assumir o lugar dela.
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -102,8 +103,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     marginTop: LOTTIE_SIZE * 0.36,
-    fontSize: 44,
-    fontWeight: '900',
-    color: '#5B3A1A',
+    fontSize: 46,
+    fontFamily: fonts.bold,
+    color: colors.ink,
   },
 });

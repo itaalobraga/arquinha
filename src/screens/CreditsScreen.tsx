@@ -1,6 +1,7 @@
 import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SOUND_CREDITS } from '../credits';
+import { colors, fonts } from '../theme';
 
 type Props = { onBack: () => void };
 
@@ -30,11 +31,18 @@ export function CreditsScreen({ onBack }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFF4D6', paddingHorizontal: 24 },
-  back: { fontSize: 17, color: '#7A5532', fontWeight: '600' },
-  title: { fontSize: 28, fontWeight: '900', color: '#5B3A1A', marginTop: 12 },
-  intro: { fontSize: 14, color: '#7A5532', marginTop: 4, marginBottom: 16 },
-  row: { backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 14, padding: 12 },
-  animal: { fontSize: 16, fontWeight: '800', color: '#5B3A1A' },
-  meta: { fontSize: 13, color: '#7A5532', marginTop: 2 },
+  container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 24 },
+  back: { fontFamily: fonts.medium, fontSize: 17, color: colors.accent },
+  title: { fontFamily: fonts.bold, fontSize: 30, color: colors.ink, marginTop: 12 },
+  intro: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 21, color: colors.inkSoft, marginTop: 4, marginBottom: 16 },
+  row: {
+    backgroundColor: colors.surface,
+    borderRadius: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: colors.line,
+  },
+  animal: { fontFamily: fonts.semibold, fontSize: 16, color: colors.ink },
+  meta: { fontFamily: fonts.regular, fontSize: 13, color: colors.inkSoft, marginTop: 2 },
 });
